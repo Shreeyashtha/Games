@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fun Festival Spin Wheel</title>
+    <!-- Google Font -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&family=Bubblegum+Sans&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="header">
+        <h1>Amazing Festival Wheel</h1>
+        <p>Spin to discover exciting festivals from Nepal!</p>
+      </div>
+      <div class="container">
+        <canvas id="wheel"></canvas>
+        <button id="spin-btn">Spin</button>
+      </div>
+      <div id="final-value">
+        <p>Click On The Spin Button To Start Learning!</p>
+      </div>
+      <a href="index.html"> <button id="exit-btn" class="exit-btn">Exit to Home</button></a>
+      
+    </div>
+
+    <!-- Modal -->
+    <div id="resultModal" class="modal">
+      <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h2 id="modalHeading">Festival Name</h2>
+        
+        <!-- Tab buttons -->
+        <div class="tab">
+          <button class="tablinks active" onclick="openTab(event, 'imageTab')">See It!</button>
+          <button class="tablinks" onclick="openTab(event, 'videoTab')">Watch It!</button>
+        </div>
+        
+        <!-- Image Tab -->
+        <div id="imageTab" class="tabcontent" style="display: block;">
+          <img id="modalImage" src="/api/placeholder/400/250" alt="Festival Image" />
+        </div>
+        
+        <!-- Video Tab -->
+        <div id="videoTab" class="tabcontent">
+          <div class="video-container">
+            <iframe id="modalVideo" src="" frameborder="0" 
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+              allowfullscreen></iframe>
+          </div>
+        </div>
+        
+        <p id="modalDescription">Festival description will appear here!</p>
+        
+        <div class="festival-info">
+          <div class="info-card">
+            <strong>Celebrated By:</strong>
+            <span id="celebratedBy">...</span>
+          </div>
+          <div class="info-card">
+            <strong>Province:</strong>
+            <span id="province">...</span>
+          </div>
+        </div>
+        
+        <div id="modalFunFact" class="fun-fact">
+          <strong>Fun Facts:</strong>
+          <span id="funFactText">Interesting fact about the festival will appear here!</span>
+        </div>
+        
+        <button class="learn-more-btn" onclick="resetWheel()">Let's Spin Again!</button>
+      </div>
+    </div>
+
+    <!-- Chart JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <!-- Chart JS Plugin for displaying text over chart -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.1.0/chartjs-plugin-datalabels.min.js"></script>
+    
+    <!-- Custom Script -->
+    <script src="script.js"></script>
+  </body>
+</html>

@@ -277,3 +277,24 @@ border: 2px solid red;
     width: calc(100% / 2 - 7px);
   }
 }
+/* Exit Button */
+.exit-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background-color: #ff5722;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  font-size: 1em;
+  border-radius: 20px;
+  cursor: pointer;
+  font-family: 'Bubblegum Sans', cursive;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  transition: all 0.3s;
+}
+
+.exit-btn:hover {
+  background-color: #e64a19;
+  transform: scale(1.05);
+}
