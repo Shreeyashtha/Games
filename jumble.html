@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Word Scramble Game</title>
+  <link rel="stylesheet" href="style1.css" />
+ 
+  <script src="script1.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js"></script>
+
+</head>
+<body>
+  <div class="container">
+    <h2>🎉 Guess the Festival 🎉</h2>
+
+    <div class="startArea">
+      <button class="startBtn" onclick="start()">Start the Game</button>
+    </div>
+
+    <div class="content">
+      <p class="word"></p>
+
+      <div class="details">
+        <p class="hint">Hint: <span></span></p>
+      </div>
+
+      <input type="text" spellcheck="false" placeholder="Type your answer..." />
+
+      <div class="buttons">
+        <button class="refresh-word">Skip Word</button>
+        <button class="check-word">Check Answer</button>
+      </div>
+
+      <div class="score-area">
+        <span>Score: </span><span class="score">0</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal for Feedback -->
+  <div id="myModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeWinModal()">&times;</span>
+      <div id="modalText"></div>
+    </div>
+  </div>
+</body>
+</html>

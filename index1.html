@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fun Festival Spin Wheel</title>
+    <!-- Google Font -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&family=Bubblegum+Sans&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Stylesheet -->
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+      }
+      body {
+        height: 100vh;
+        background: linear-gradient(135deg, #86e3ff, #e254ff);
+        font-family: "Comic Neue", cursive;
+        overflow: hidden;
+      }
+      .confetti {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        background-color: #f00;
+        border-radius: 50%;
+        animation: fall 5s linear infinite;
+      }
+      @keyframes fall {
+        0% {
+          transform: translateY(-100vh) rotate(0deg);
+        }
+        100% {
+          transform: translateY(100vh) rotate(360deg);
+        }
+      }
+      .wrapper {
+        width: 90%;
+        max-width: 34.37em;
+        max-height: 90vh;
+        background-color: #ffffff;
+        position: absolute;
+        transform: translate(-50%, -50%);
+        top: 50%;
+        left: 50%;
+        padding: 3em;
+        border-radius: 1em;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.2),
+                    0 0 60px rgba(83, 0, 130, 0.2);
+        border: 6px solid #ffd200;
+      }
+      .header {
+        text-align: center;
+        margin-bottom: 1em;
+      }
+      .header h1 {
+        font-family: 'Bubblegum Sans', cursive;
+        color: #ff5722;
+        font-size: 2.2em;
+        text-shadow: 2px 2px 0px #ffd200;
+        margin-bottom: 0.3em;
+      }
+      .header p {
+        color: #9c27b0;
+        font-size: 1.2em;
+      }
+      .container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+      }
+      #wheel {
+        max-height: inherit;
+        width: inherit;
+        top: 0;
+        padding: 0;
+        filter: drop-shadow(0px 0px 5px rgba(0,0,0,0.2));
+      }
+      @keyframes bounce {
+        0%, 100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+      }
+      #spin-btn {
+        position: absolute;
+        transform: translate(-50%, -50%);
+        top: 50%;
+        left: 50%;
+        height: 26%;
+        width: 26%;
+        border-radius: 50%;
+        cursor: pointer;
+        border: 4px solid #fff;
+        background: radial-gradient(#ff9800 50%, #e65100 85%);
+        color: white;
+        text-transform: uppercase;
+        font-size: 1.8em;
+        letter-spacing: 0.1em;
+        font-weight: 600;
+        font-family: 'Bubblegum Sans', cursive;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        transition: all 0.3s ease;
+        animation: bounce 2s infinite;
+      }
+      #spin-btn:hover {
+        background: radial-gradient(#ffb74d 50%, #f57c00 85%);
+        transform: translate(-50%, -50%) scale(1.05);
+      }
+      #spin-btn:active {
+        transform: translate(-50%, -50%) scale(0.95);
+      }
+      img.spinner-arrow {
+        position: absolute;
+        width: 4em;
+        top: 42%;
+        right: -8%;
+        filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.3));
+        z-index: 10;
+      }
+      #final-value {
+        font-size: 1.5em;
+        text-align: center;
+        margin-top: 1.5em;
+        color: #4a148c;
+        font-weight: 700;
+        background-color: #f3e5f5;
+        padding: 10px;
+        border-radius: 10px;
+        border: 3px dashed #ce93d8;
+      }
+      @media screen and (max-width: 768px) {
+        .wrapper {
+          font-size: 12px;
+          padding: 2em;
+        }
+        img.spinner-arrow {
+          right: -5%;
+        }
+      }
+
+      /* Modal Background */
+      .modal {
+        display: none; /*Hidden by default*/
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        overflow: auto; /* Allow scrolling if content overflows */
+      }
+
+      /* Modal Content */
+      .modal-content {
+        background: linear-gradient(to bottom, #ffffff, #f8f8ff);
+        margin: 5% auto; /* Center vertically and horizontally */
+        padding: 30px;
+        border-radius: 20px;
+        width: 90%;
+        max-width: 600px; /* Increased width for video */
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        position: relative;
+        border: 8px solid #03a9f4;
+        animation: popIn 0.5s ease-out;
+      }
+      
+      @keyframes popIn {
+        0% {
+          transform: scale(0.5);
+          opacity: 0;
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      /* Image Styling */
+      .modal-content img {
+        position: static;
+        width: 100%; /* Responsive width */
+        height: auto; /* Maintain aspect ratio */
+        max-height: 250px; /* Prevent image from being too tall */
+        display: block; /* Center the image */
+        margin: 15px auto;
+        border-radius: 15px;
+        border: 5px solid #ffd54f;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      }
+
+      /* Video Styling */
+      .video-container {
+        position: relative;
+        padding-bottom: 56.25%; /* 16:9 aspect ratio */
+        height: 0;
+        overflow: hidden;
+        margin: 15px 0;
+        border-radius: 15px;
+        border: 5px solid #ffd54f;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      }
+      
+      .video-container iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+      }
+
+      /* Heading and Paragraph */
+      .modal-content h2 {
+        margin: 10px 0;
+        color: #ff5722;
+        font-family: 'Bubblegum Sans', cursive;
+        font-size: 2.5em;
+        text-shadow: 2px 2px 0px #ffeb3b;
+      }
+
+      .modal-content p {
+        font-size: 1.2em;
+        color: #3f51b5;
+        margin-bottom: 15px;
+        line-height: 1.6;
+        background-color: #e3f2fd;
+        padding: 15px;
+        border-radius: 10px;
+        border: 2px dashed #90caf9;
+      }
+
+      /* Tab System */
+      .tab {
+        overflow: hidden;
+        margin-top: 15px;
+        display: flex;
+        justify-content: center;
+      }
+      
+      .tab button {
+        background-color: #f5f5f5;
+        float: left;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        padding: 12px 24px;
+        transition: 0.3s;
+        border-radius: 15px 15px 0 0;
+        margin-right: 5px;
+        font-family: 'Bubblegum Sans', cursive;
+        font-size: 1.2em;
+        color: #673ab7;
+        border: 3px solid #e0e0e0;
+        border-bottom: none;
+      }
+      
+      .tab button:hover {
+        background-color: #e0e0e0;
+        transform: translateY(-3px);
+      }
+      
+      .tab button.active {
+        background-color: #8bc34a;
+        color: white;
+        border-color: #689f38;
+        box-shadow: 0 -4px 8px rgba(0,0,0,0.1);
+      }
+      
+      .tabcontent {
+        display: none;
+        padding: 15px;
+        border-top: none;
+        animation: fadeIn 1s;
+      }
+      
+      @keyframes fadeIn {
+        from {opacity: 0;}
+        to {opacity: 1;}
+      }
+
+      /* Close Button */
+      .close-btn {
+        color: #f44336;
+        font-size: 36px;
+        font-weight: bold;
+        position: absolute;
+        top: 5px;
+        right: 15px;
+        cursor: pointer;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        transition: all 0.2s;
+      }
+
+      .close-btn:hover {
+        color: #d32f2f;
+        transform: scale(1.2) rotate(5deg);
+      }
+      
+      /* Learn More Button */
+      .learn-more-btn {
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        font-size: 1.2em;
+        border-radius: 30px;
+        cursor: pointer;
+        margin-top: 15px;
+        font-family: 'Bubblegum Sans', cursive;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        transition: all 0.3s;
+      }
+      
+      .learn-more-btn:hover {
+        background-color: #388e3c;
+        transform: scale(1.05);
+      }
+      
+      /* Fun fact box */
+      .fun-fact {
+        background-color: #fff9c4;
+        border-left: 5px solid #fbc02d;
+        padding: 10px 15px;
+        margin-top: 15px;
+        border-radius: 10px;
+        font-style: italic;
+        text-align: left;
+      }
+      
+      .fun-fact strong {
+        color: #ff6f00;
+        display: block;
+        margin-bottom: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Create confetti elements -->
+    <script>
+      function createConfetti() {
+        const colors = ['#ff5252', '#ffeb3b', '#2196f3', '#4caf50', '#e040fb', '#ff9800'];
+        for (let i = 0; i < 50; i++) {
+          const confetti = document.createElement('div');
+          confetti.className = 'confetti';
+          confetti.style.left = Math.random() * 100 + 'vw';
+          confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+          confetti.style.width = (Math.random() * 10 + 5) + 'px';
+          confetti.style.height = (Math.random() * 10 + 5) + 'px';
+          confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+          confetti.style.animationDelay = (Math.random() * 5) + 's';
+          document.body.appendChild(confetti);
+        }
+      }
+      window.onload = createConfetti;
+    </script>
+    
+    <div class="wrapper">
+      <div class="header">
+        <h1>Amazing Festival Wheel</h1>
+        <p>Spin to discover exciting festivals from around the world!</p>
+      </div>
+      <div class="container">
+        <canvas id="wheel"></canvas>
+        <button id="spin-btn">Spin</button>
+        <img src="/api/placeholder/100/100" alt="spinner-arrow" class="spinner-arrow" />
+      </div>
+      <div id="final-value">
+        <p>Click On The Spin Button To Start Learning!</p>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="resultModal" class="modal">
+      <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h2 id="modalHeading">Festival Name</h2>
+        
+        <!-- Tab buttons -->
+        <div class="tab">
+          <button class="tablinks active" onclick="openTab(event, 'imageTab')">See It!</button>
+          <button class="tablinks" onclick="openTab(event, 'videoTab')">Watch It!</button>
+        </div>
+        
+        <!-- Image Tab -->
+        <div id="imageTab" class="tabcontent" style="display: block;">
+          <img id="modalImage" src="/api/placeholder/400/250" alt="Festival Image" />
+        </div>
+        
+        <!-- Video Tab -->
+        <div id="videoTab" class="tabcontent">
+          <div class="video-container">
+            <iframe id="modalVideo" src="" frameborder="0" 
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+              allowfullscreen></iframe>
+          </div>
+        </div>
+        
+        <p id="modalDescription">Festival description will appear here!</p>
+        
+        <div id="modalFunFact" class="fun-fact">
+          <strong>Fun Fact:</strong>
+          <span id="funFactText">Interesting fact about the festival will appear here!</span>
+        </div>
+        
+        <button class="learn-more-btn" onclick="resetWheel()">Let's Spin Again!</button>
+      </div>
+    </div>
+
+    <!-- Chart JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <!-- Chart JS Plugin for displaying text over chart -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.1.0/chartjs-plugin-datalabels.min.js"></script>
+    
+    <!-- Script -->
+    <script>
+      const wheel = document.getElementById("wheel");
+      const spinBtn = document.getElementById("spin-btn");
+      const finalValue = document.getElementById("final-value");
+      
+      // Object that stores values of minimum and maximum angle for a value
+      const rotationValues = [
+        { minDegree: 0, maxDegree: 60, value: 2 },
+        { minDegree: 61, maxDegree: 120, value: 1 },
+        { minDegree: 121, maxDegree: 180, value: 6 },
+        { minDegree: 181, maxDegree: 240, value: 5 },
+        { minDegree: 241, maxDegree: 300, value: 4 },
+        { minDegree: 301, maxDegree: 360, value: 3 },
+      ];
+      
+      // Size of each piece
+      const data = [16, 16, 16, 16, 16, 16];
+      
+      // Background color for each piece - bright colors for kids
+      var pieColors = [
+        "#FF5252", // Red
+        "#FFEB3B", // Yellow
+        "#2196F3", // Blue
+        "#4CAF50", // Green
+        "#E040FB", // Purple
+        "#FF9800", // Orange
+      ];
+      
+      // Create chart
+      let myChart = new Chart(wheel, {
+        // Plugin for displaying text on pie chart
+        plugins: [ChartDataLabels],
+        // Chart Type Pie
+        type: "pie",
+        data: {
+          // Labels(values which are to be displayed on chart)
+          labels: [
+            "Holi",
+            "Carnival",
+            "Diwali",
+            "Songkran",
+            "Halloween",
+            "Lantern Festival"
+          ],
+          description: [
+            "Holi is a joyful Hindu festival known as the 'Festival of Colors.' People throw colored powders and water at each other, dance, sing, and share sweets. It celebrates the arrival of spring and the victory of good over evil.",
+            "Carnival is a huge, colorful celebration held in many countries before Lent. It features amazing parades with dancers in bright costumes, music, delicious food, and fun games. Brazil's Rio Carnival is the biggest in the world!",
+            "Diwali is the beautiful Hindu 'Festival of Lights' where people decorate their homes with oil lamps called diyas, create colorful rangoli patterns, exchange gifts, and enjoy fireworks and special treats!",
+            "Songkran is Thailand's fun water festival that marks their New Year! For three days, people splash water on each other, have water fights with water guns, and parade Buddha statues through the streets.",
+            "Halloween is a spooky and fun holiday when children dress up in costumes, go trick-or-treating for candy, carve jack-o'-lanterns from pumpkins, and tell scary stories!",
+            "The Lantern Festival in China marks the end of New Year celebrations. Families release glowing lanterns into the sky, solve riddles written on lanterns, watch lion dances, and eat sweet rice balls called tangyuan!"
+          ],
+          // Add video URLs for each festival
+          videoLinks: [
+            "https://www.youtube.com/embed/Hh-o5g4tLVE", // Holi
+            "https://www.youtube.com/embed/YQ7MUC5yl78", // Carnival
+            "https://www.youtube.com/embed/HrrW3rO51ak", // Diwali
+            "https://www.youtube.com/embed/f4d71-r6ZVM", // Songkran
+            "https://www.youtube.com/embed/oQTAj7nQmHY", // Halloween
+            "https://www.youtube.com/embed/q5Sq6nP2CmY", // Lantern Festival
+          ],
+          // Fun facts for each festival
+          funFacts: [
+            "In some parts of India, Holi celebrations last for 16 days! The color blue represents Lord Krishna, who is often depicted with blue skin.",
+            "The word 'Carnival' comes from the Latin words 'carne vale' which means 'farewell to meat' - because people would eat all their meat before the fasting period of Lent.",
+            "Diwali is so bright that it can be seen from space! Astronauts have reported seeing the festival lights from the International Space Station.",
+            "During Songkran, some temples in Thailand feature sand pagodas that people decorate with colorful flags and flowers.",
+            "The tradition of carving pumpkins comes from an Irish legend about a man named 'Stingy Jack' who tricked the Devil!",
+            "The sweet rice balls eaten during the Lantern Festival are round to represent family reunion and the full moon."
+          ],
+          // Settings for dataset/pie
+          datasets: [
+            {
+              backgroundColor: pieColors,
+              data: data,
+            },
+          ],
+        },
+        options: {
+          // Responsive chart
+          responsive: true,
+          animation: { duration: 0 },
+          plugins: {
+            // Hide tooltip and legend
+            tooltip: false,
+            legend: {
+              display: false,
+            },
+            // Display labels inside pie chart
+            datalabels: {
+              color: "#ffffff",
+              formatter: (_, context) => context.chart.data.labels[context.dataIndex],
+              font: { size: 16, weight: 'bold' },
+              textShadow: '2px 2px 2px rgba(0,0,0,0.5)'
+            },
+          },
+        },
+      });
+      
+      // Function to show confetti when festival is selected
+      function showCelebration() {
+        // Play a celebration sound
+        const audio = new Audio('https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3');
+        audio.volume = 0.5;
+        audio.play().catch(e => console.log("Audio play failed:", e));
+        
+        // Additional confetti
+        createConfetti();
+      }
+      
+      // Function to reset and return to the wheel
+      function resetWheel() {
+        document.getElementById("resultModal").style.display = "none";
+        // Stop video when modal is closed
+        document.getElementById("modalVideo").src = document.getElementById("modalVideo").src;
+      }
+      
+      // Function to open tabs
+      function openTab(evt, tabName) {
+        // Declare all variables
+        var i, tabcontent, tablinks;
+      
+        // Get all elements with class="tabcontent" and hide them
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+          tabcontent[i].style.display = "none";
+        }
+      
+        // Get all elements with class="tablinks" and remove the class "active"
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+          tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+      
+        // Show the current tab, and add an "active" class to the button that opened the tab
+        document.getElementById(tabName).style.display = "block";
+        evt.currentTarget.className += " active";
+      }
+      
+      // Display value based on the randomAngle
+      const valueGenerator = (angleValue) => {
+        for (let i of rotationValues) {
+          if (angleValue >= i.minDegree && angleValue <= i.maxDegree) {
+            // Get index for data access
+            const festivalIndex = i.value - 1;
+            
+            // Dynamically set heading, image, video, and description
+            document.getElementById("modalHeading").innerHTML = `${
+              myChart.data.labels[festivalIndex]
+            }`;
+            document.getElementById("modalImage").src = `/api/placeholder/400/250`;
+            document.getElementById("modalVideo").src = myChart.data.videoLinks[festivalIndex];
+            document.getElementById("modalDescription").innerHTML = `${
+              myChart.data.description[festivalIndex]
+            }`;
+            document.getElementById("funFactText").innerHTML = `${
+              myChart.data.funFacts[festivalIndex]
+            }`;
+      
+            // Set tab to image by default
+            document.querySelector(".tablinks.active").classList.remove("active");
+            document.querySelector(".tablinks").classList.add("active");
+            document.getElementById("imageTab").style.display = "block";
+            document.getElementById("videoTab").style.display = "none";
+      
+            // Show celebration effects
+            showCelebration();
+            
+            // Display the modal with a short delay for effect
+            setTimeout(() => {
+              document.getElementById("resultModal").style.display = "block";
+            }, 1000);
+      
+            // Change the final-value text
+            finalValue.innerHTML = `<p>You got: ${myChart.data.labels[festivalIndex]}!</p>`;
+      
+            spinBtn.disabled = false;
+            break;
+          }
+        }
+      };
+      
+      // Modal close functionality
+      document.querySelector(".close-btn").onclick = () => {
+        resetWheel();
+      };
+      
+      window.onclick = (event) => {
+        const modal = document.getElementById("resultModal");
+        if (event.target === modal) {
+          resetWheel();
+        }
+      };
+      
+      // Spinner count
+      let count = 0;
+      // 100 rotations for animation and last rotation for result
+      let resultValue = 101;
+      
+      // Start spinning
+      spinBtn.addEventListener("click", () => {
+        spinBtn.disabled = true;
+        // Change final value text while spinning
+        finalValue.innerHTML = `<p>Finding a festival...</p>`;
+        // Generate random degrees to stop at
+        let randomDegree = Math.floor(Math.random() * 356);
+      
+        // Interval for rotation animation
+        let rotationInterval = window.setInterval(() => {
+          // Set rotation for piechart
+          /*
+          Initially to make the piechart rotate faster we set resultValue to 101 so it rotates 101 degrees at a time and this reduces by 1 with every count. Eventually on last rotation we rotate by 1 degree at a time.
+          */
+          myChart.options.rotation = myChart.options.rotation + resultValue;
+          // Update chart with new value;
+          myChart.update();
+          // If rotation>360 reset it back to 0
+          if (myChart.options.rotation >= 360) {
+            count += 1;
+            resultValue -= 5;
+            myChart.options.rotation = 0;
+          } else if (count > 15 && myChart.options.rotation == randomDegree) {
+            valueGenerator(randomDegree);
+            clearInterval(rotationInterval);
+            count = 0;
+            resultValue = 101;
+          }
+        }, 10);
+      });
+    </script>
+  </body>
+</html>
